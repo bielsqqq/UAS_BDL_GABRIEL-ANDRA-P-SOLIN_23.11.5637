@@ -1,0 +1,25 @@
+stages:
+  prepare:
+    cmd: py -3.12 .dvc/src/prepare.py
+    deps:
+      - .dvc/src/prepare.py
+      - .dvc/data/raw/dataset.csv
+    outs:
+      - .dvc/data/processed/X_train.csv
+      - .dvc/data/processed/X_test.csv
+      - .dvc/data/processed/y_train.csv
+      - .dvc/data/processed/y_test.csv
+
+  train:
+    cmd: py -3.12 .dvc/src/train_hho.py
+    deps:
+      - .dvc/src/train_hho.py
+      - .dvc/data/processed/X_train.csv
+      - .dvc/data/processed/X_test.csv
+      - .dvc/data/processed/y_train.csv
+      - .dvc/data/processed/y_test.csv
+    outs:
+      - .dvc/models/best_rf_hho_model.pkl
+    metrics:
+      - .dvc/metrics.json:
+          cache: false
